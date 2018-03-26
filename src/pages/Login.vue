@@ -30,20 +30,27 @@ export default {
       if (this.username && this.password) {
         this.$http({
           method: 'post',
-          url: this.$urlPrefix + '/login/do',
+          url: '/login/do',
           params: {
             username: this.username,
             password: this.password
           }
         }).then((res) => {
-          console.log(res.data.message)
-        }).catch(res => console.error('login failed:' + res))
-        this.$message({
-          type: 'success',
-          message: '登录成功！',
-          duration: 2000
-        })
-        this.$router.push('/index')
+          if (res.data.successful) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg,
+              duration: 2000
+            })
+            this.$router.push('/index')
+          } else {
+            this.$message({
+              type: 'warning',
+              message: res.data.msg
+            })
+          }
+        }).catch(err => console.error('login failed:' + err))
+          .then(() => { this.loading = false })
 
         // 使用jsonp跨域通信
         // window.handleRes = function (res) {
@@ -57,9 +64,8 @@ export default {
           type: 'error',
           message: '请输入正确的用户名和密码！'
         })
+        this.loading = false
       }
-
-      this.loading = false
     }
   }
 }

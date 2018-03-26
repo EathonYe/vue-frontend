@@ -9,8 +9,9 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+axios.defaults.baseURL = 'http://localhost:8070'
 Vue.prototype.$http = axios
-Vue.prototype.$urlPrefix = 'http://localhost:8070'
+
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
