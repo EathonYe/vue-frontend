@@ -42,6 +42,7 @@ export default {
               message: res.data.msg,
               duration: 2000
             })
+            this.$store.commit('setLoginSubject', { username: this.username })
             this.$router.push('/index')
           } else {
             this.$message({
