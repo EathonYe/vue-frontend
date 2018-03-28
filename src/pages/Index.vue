@@ -75,14 +75,6 @@ export default {
       return this.$store.state.loginSubject.username
     }
   },
-  methods: {
-    handleEdit (index, row) {
-
-    },
-    handleDelete (index, row) {
-
-    }
-  },
   created () {
     this.$store.dispatch('getUserList')
   }
