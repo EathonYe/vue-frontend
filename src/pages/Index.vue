@@ -8,18 +8,18 @@
               <el-dropdown>
                   <i class="el-icon-more-outline" style="margin-left: 10px"></i>
                   <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>查看</el-dropdown-item>
-                      <el-dropdown-item>新增</el-dropdown-item>
-                      <el-dropdown-item>删除</el-dropdown-item>
+                      <el-dropdown-item>个人主页</el-dropdown-item>
+                      <el-dropdown-item>修改密码</el-dropdown-item>
+                      <el-dropdown-item>退出登录</el-dropdown-item>
                   </el-dropdown-menu>
               </el-dropdown>
           </div>
       </el-header>
       <el-container>
           <el-aside width="250px">
-            <el-menu :default-openeds="['1', '3']">
+            <el-menu default-active="1-1" :default-openeds="['1']">
               <el-submenu index="1">
-                  <template slot="title"><i class="el-icon-message"></i>基础支撑系统</template>
+                  <template slot="title"><i class="el-icon-message"></i>基础信息</template>
                   <el-menu-item-group>
                     <el-menu-item index="1-1">人员管理</el-menu-item>
                     <el-menu-item index="1-2">选项2</el-menu-item>
@@ -61,28 +61,7 @@
               </el-menu>
           </el-aside>
           <el-main>
-            <el-table :data="tableData" stripe height="600">
-              <el-table-column prop="date" label="日期">
-              </el-table-column>
-              <el-table-column prop="name" label="姓名">
-              </el-table-column>
-              <el-table-column prop="address" label="地址">
-              </el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    round
-                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    round
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+            <router-view name="subMain"></router-view>
           </el-main>
       </el-container>
     </el-container>
@@ -93,15 +72,7 @@ export default {
   name: 'Index',
   computed: {
     username () {
-      return 'Eathon'
-    },
-    tableData () {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }
-      return Array(20).fill(item)
+      return this.$store.state.loginSubject.username
     }
   },
   methods: {
@@ -111,6 +82,9 @@ export default {
     handleDelete (index, row) {
 
     }
+  },
+  created () {
+    this.$store.dispatch('getUserList')
   }
 }
 </script>
@@ -146,8 +120,5 @@ export default {
     .el-header .fr span {
       color: #333;
       font-size: 15px;
-    }
-    .el-table th,.el-table td {
-      text-align: center;
     }
 </style>

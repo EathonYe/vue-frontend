@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Login from '@/pages/Login'
 import Index from '@/pages/Index'
+import UserMgmt from '@/pages/UserMgmt'
 
 Vue.use(Router)
 
@@ -20,7 +21,16 @@ export default new Router({
       name: 'index',
       components: {
         main: Index
-      }
+      },
+      children: [
+        {
+          path: '/',
+          name: 'userMgmt',
+          components: {
+            subMain: UserMgmt
+          }
+        }
+      ]
     }
   ]
 })
