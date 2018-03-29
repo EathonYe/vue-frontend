@@ -42,10 +42,10 @@
           <el-form-item label="用户名" :label-width="formLabelWidth" prop="username" required>
             <el-input v-model="form.username" auto-complete="off" placeholder="请输入用户名"></el-input>
           </el-form-item>
-          <el-form-item label="密码" :label-width="formLabelWidth" prop="password" required>
+          <el-form-item label="密码" :label-width="formLabelWidth" prop="password" required v-if="!editDialog">
             <el-input type="password" v-model="form.password" auto-complete="off" placeholder="请输入密码"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPwd" required>
+          <el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPwd" required v-if="!editDialog">
             <el-input type="password" v-model="form.checkPwd" auto-complete="off" placeholder="请再次输入密码"></el-input>
           </el-form-item>
           <el-form-item label="性别" :label-width="formLabelWidth" prop="sex" required>
@@ -97,6 +97,7 @@ export default {
       },
       dialogTitle: '',
       dialogFormVisible: false,
+      editDialog: false,
       formLabelWidth: '80px',
       form: {
         username: '',
@@ -151,11 +152,50 @@ export default {
       this.dialogTitle = '添加用户'
     },
     handleEdit (index, row) {
+      this.editDialog = true
       this.dialogFormVisible = true
       this.dialogTitle = '编辑用户'
+      this.form.username = row.username
+      this.form.phone = row.phone
+      this.form.email = row.email
+      this.form.sex = row.sex.toString()
+      // this.password = row.password
+      // this.checkPwd = row.password
     },
     handleDelete (index, row) {
-
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http({
+          method: 'post',
+          url: '/user/delete',
+          params: {
+            id: row.id
+          }
+        }).then((res) => {
+          if (res.data.successful) {
+            this.$store.dispatch('getUserList')
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data.msg
+            })
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -163,13 +203,7 @@ export default {
           this.$http({
             method: 'post',
             url: '/user/add',
-            params: {
-              username: this.form.username,
-              password: this.form.password,
-              sex: this.form.sex,
-              phone: this.form.phone,
-              email: this.form.email
-            }
+            params: this.form
           }).then((res) => {
             if (res.data.successful) {
               this.$store.dispatch('getUserList')
@@ -193,6 +227,7 @@ export default {
     closeDialog () {
       this.dialogFormVisible = false
       this.resetForm('userForm')
+      this.editDialog = false
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
