@@ -100,6 +100,7 @@ export default {
       editDialog: false,
       formLabelWidth: '80px',
       form: {
+        id: '',
         username: '',
         password: '',
         checkPwd: '',
@@ -159,6 +160,7 @@ export default {
       this.form.phone = row.phone
       this.form.email = row.email
       this.form.sex = row.sex.toString()
+      this.form.id = row.id
       // this.password = row.password
       // this.checkPwd = row.password
     },
@@ -202,7 +204,7 @@ export default {
         if (valid) {
           this.$http({
             method: 'post',
-            url: '/user/add',
+            url: this.editDialog ? '/user/edit' : '/user/add',
             params: this.form
           }).then((res) => {
             if (res.data.successful) {
@@ -231,6 +233,11 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+      this.form.id = ''
+      this.form.username = ''
+      this.form.phone = ''
+      this.form.email = ''
+      this.form.sex = ''
     }
   }
 }
