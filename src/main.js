@@ -7,11 +7,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import store from './store/index'
+import loadingBar from '@/components/LoadingBar.js'
 
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://localhost:8070'
 Vue.prototype.$http = axios
+
+Vue.prototype.$loadingBar = loadingBar
 
 Vue.use(ElementUI)
 
