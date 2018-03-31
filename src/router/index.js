@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Login from '@/pages/Login'
 import Index from '@/pages/Index'
 import UserMgmt from '@/pages/UserMgmt'
+import Test from '@/pages/Test'
 
 Vue.use(Router)
 
@@ -28,6 +29,13 @@ export default new Router({
           name: 'userMgmt',
           components: {
             subMain: UserMgmt
+          }
+        },
+        {
+          path: 'test',
+          name: 'test',
+          components: {
+            subMain: Test
           }
         }
       ]
